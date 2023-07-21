@@ -1,0 +1,28 @@
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-url-shortener',
+  templateUrl: './url-shortener.component.html',
+  styleUrls: ['./url-shortener.component.css']
+})
+export class UrlShortenerComponent {
+  originalURL: string;
+  shortURL: string;
+  errorMessage: string;
+
+  constructor(private http: HttpClient) { }
+
+  shortenURL() {
+    this.http.post<string>('/api/shorten', this.originalURL).subscribe(
+      (shortURL: string) => {
+        this.shortURL = shortURL;
+        this.errorMessage = null;
+      },
+      (error) => {
+        this.shortURL = null;
+        this.errorMessage = error.error;
+      }
+    );
+  }
+}
